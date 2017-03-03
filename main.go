@@ -5,11 +5,14 @@ import (
 	"log"
 
 	"github.com/jroimartin/gocui"
+	"github.com/lucasefe/go-nv/ui"
 )
 
 const (
-	searchView = "SearchInput"
-	statusView = "Status"
+	// SearchView is the name of the Search view
+	SearchView = "SearchInput"
+	// StatusView is the name of the Status view
+	StatusView = "Status"
 )
 
 var vbuf, buf string
@@ -26,7 +29,7 @@ func search(g *gocui.Gui, v *gocui.View) error {
 	v.SetCursor(0, 0)
 
 	g.Execute(func(g *gocui.Gui) error {
-		status, err := g.View(statusView)
+		status, err := g.View(StatusView)
 		if err != nil {
 			return err
 		}
@@ -40,42 +43,12 @@ func search(g *gocui.Gui, v *gocui.View) error {
 }
 
 func layout(g *gocui.Gui) error {
-	if err := renderSearch(g); err != nil {
+	if err := ui.RenderSearch(g, SearchView); err != nil {
 		return err
 	}
 
-	if err := renderStatus(g); err != nil {
+	if err := ui.RenderStatus(g, StatusView); err != nil {
 		return err
-	}
-
-	return nil
-}
-
-func renderSearch(g *gocui.Gui) error {
-	maxX, _ := g.Size()
-
-	if v, err := g.SetView(searchView, 0, 0, maxX-1, 2); err != nil {
-		if err != gocui.ErrUnknownView {
-			return err
-		}
-		v.Editable = true
-		v.Wrap = false
-		if _, err := g.SetCurrentView(searchView); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func renderStatus(g *gocui.Gui) error {
-	maxX, maxY := g.Size()
-	if v, err := g.SetView(statusView, 0, maxY-3, maxX-1, maxY-1); err != nil {
-		if err != gocui.ErrUnknownView {
-			return err
-		}
-
-		v.Frame = false
 	}
 
 	return nil
@@ -92,11 +65,11 @@ func main() {
 
 	g.SetManagerFunc(layout)
 
-	if err := g.SetKeybinding(searchView, gocui.KeyCtrlC, gocui.ModNone, quit); err != nil {
+	if err := g.SetKeybinding(SearchView, gocui.KeyCtrlC, gocui.ModNone, quit); err != nil {
 		log.Panicln(err)
 	}
 
-	if err := g.SetKeybinding(searchView, gocui.KeyEnter, gocui.ModNone, search); err != nil {
+	if err := g.SetKeybinding(SearchView, gocui.KeyEnter, gocui.ModNone, search); err != nil {
 		log.Panicln(err)
 	}
 
