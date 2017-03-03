@@ -1,0 +1,7 @@
+package: github.com/lucasefe/go-nv
+import:
+- package: github.com/jroimartin/gocui
+  repo: git@github.com:jroimartin/gocui.git
+  vcs: git
+  version: ed41d1bd2c217d4d1e312c2ee5d2f0c7793a99cc
+- package: github.com/mattn/go-runewidth
